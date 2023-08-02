@@ -1,2 +1,2 @@
 #!/bin/bash
-ls-n ls-l ls-a
+ls -n ls -l ls -a
