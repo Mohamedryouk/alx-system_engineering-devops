@@ -1,2 +1,2 @@
 #!bin/bash
-head /etc/psswd
+ls -t1| head -n 10
