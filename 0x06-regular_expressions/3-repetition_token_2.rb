@@ -1,2 +1,9 @@
 #!/usr/bin/env ruby
-puts ARGV[0].scan(/hb+t+n/).join
+
+def matchinput(input)
+    regex = /hbt+n/
+
+    matchresult = input.match(regex)
+
+    puts matchresult ? matchresult[0] : ''
+end
