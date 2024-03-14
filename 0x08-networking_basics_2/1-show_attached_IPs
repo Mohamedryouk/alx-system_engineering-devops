@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # Retrieve active IPv4 addresses and display them
 
-ip addr show | grep -oP '(?<=inet\s)\d+\.\d+\.\d+\.\d+' | grep -vE '127.0.0.1|0.0.0.0'
+ip addr show | awk '/inet / {print $2}' | grep -oP '^\d+\.\d+\.\d+\.\d+'
