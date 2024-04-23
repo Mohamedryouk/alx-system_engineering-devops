@@ -1,3 +1,4 @@
+#a configuration code that allows certain things only
 package {     'openssh-server':
     ensure => installed
 }
