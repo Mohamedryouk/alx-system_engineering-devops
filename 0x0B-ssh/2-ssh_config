@@ -4,3 +4,4 @@ Host my_server
     User ubuntu
     IdentityFile ~/.ssh/id_rsa
     Port 22
+    password no
