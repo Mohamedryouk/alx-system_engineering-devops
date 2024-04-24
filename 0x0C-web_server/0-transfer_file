@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Check if the passed parameters are 4
+if [ "$#" -ne 4 ]; then
+    echo "Usage: $0 PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
+    exit 1
+fi
+
+# Assigning the parameters
+PATH_TO_FILE=$1
+IP=$2
+USERNAME=$3
+PATH_TO_SSH_KEY=$4
+
+# Disabling strict authorization for scp
+scp -o "StrictHostKeyChecking=no" -i "$PATH_TO_SSH_KEY" "$PATH_TO_FILE" "$USERNAME@$IP:~/"
+
+# Checking the transfer operation if it's successful
+if [ $? -eq 0 ]; then
+    echo "File Transfer successful"
+else
+    echo "File Transfer Failed"
+fi
