@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# connecting to a server through private key
+eval $("ssh-agent")
+ssh-add ~/.ssh/school
+
+ssh ubuntu@100.26.240.76
