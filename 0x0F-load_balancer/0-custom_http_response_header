@@ -1,16 +1,36 @@
 #!/usr/bin/env bash
-#commands to install nginx
 
+# Update package index
 sudo apt-get update
-sudo apt-get install nginx
-sudo ufw 'Nginx HTTP'
 
-echo "Hello world!" | sudo tee /var/www/html/index.html
+# Install nginx
+sudo apt-get install nginx -y
 
-#testing nginx
+# Allow Nginx through the firewall
+sudo ufw allow 'Nginx Full'
 
+# Add custom header configuration to Nginx
+sudo bash -c 'cat <<EOF > /etc/nginx/conf.d/custom_response_header.conf
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+    # Custom HTTP response header
+    add_header X-Served-By \$hostname;
+}
+EOF'
+
+# Test Nginx configuration
 sudo nginx -t
 
-sudo service nginx reload
-
-sudo service nginx restart
+# Reload Nginx to apply changes
+sudo systemctl reload nginx
