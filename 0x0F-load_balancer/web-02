@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
-# connecting to a server through private key
-eval $("ssh-agent")
-ssh-add ~/.ssh/school
+# Configure Nginx so that its HTTP response contains a custom header
+var=$(hostname)
+string1="error_page 404 \/custom_404.html;\n location \/redirect_me {\n return 301 \$scheme:\/\/www.google.com;"
+string2="server {\n\tadd_header X-Served-By $var;"
 
-
-ssh ubuntu@100.25.155.205
+apt-get update -y
+apt-get install nginx -y
+echo "Hello World!" > /usr/share/nginx/html/index.html
+mkdir -p /var/www/html
+echo "Error page not found" > /var/www/html/custom_404.html
+sudo sed -i -E "s/^[^#]+location \/ \{/$new_string/" /etc/nginx/sites-available/default
+sudo sed -i -E "s/^server \{/$new_string2/" /etc/nginx/sites-available/default
+sudo service nginx start
