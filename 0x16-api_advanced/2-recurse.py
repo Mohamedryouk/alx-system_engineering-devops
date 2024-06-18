@@ -5,6 +5,7 @@ import requests
 
 
 def recurse(subreddit, hot_list=[], after=""):
+    """recurse func"""
     base_url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
     params = {"after": after} if after else {}
     response = requests.get(base_url, params=params,
