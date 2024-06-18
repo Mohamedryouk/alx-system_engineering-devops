@@ -1,23 +1,28 @@
 #!/usr/bin/python3
-"""recurse"""
-
+"""
+Using reddit's API
+"""
 import requests
+after = None
 
 
-def recurse(subreddit, hot_list=[], after=""):
-    """recurse func"""
-    base_url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    params = {"after": after} if after else {}
-    response = requests.get(base_url, params=params,
-                            headers={'User-agent': 'your bot 0.1'})
-    if response.status_code == 404:
-        return None
-    data = response.json()
-    if not data['data']['children']:
-        return hot_list if hot_list else None
-    hot_list.extend([article['data']['title']
-                    for article in data['data']['children']])
-    after = data['data']['after']
-    if not after:
+def recurse(subreddit, hot_list=[]):
+    """returning top ten post titles recursively"""
+    global after
+    user_agent = {'User-Agent': 'api_advanced-project'}
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    parameters = {'after': after}
+    results = requests.get(url, params=parameters, headers=user_agent,
+                           allow_redirects=False)
+
+    if results.status_code == 200:
+        after_data = results.json().get("data").get("after")
+        if after_data is not None:
+            after = after_data
+            recurse(subreddit, hot_list)
+        all_titles = results.json().get("data").get("children")
+        for title_ in all_titles:
+            hot_list.append(title_.get("data").get("title"))
         return hot_list
-    return recurse(subreddit, hot_list, after)
+    else:
+        return (None)
