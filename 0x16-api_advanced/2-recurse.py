@@ -1,43 +1,21 @@
 #!/usr/bin/python3
+
 import requests
 
-"""
-Using reddit's API
-"""
 
-
-def recurse(subreddit, hot_list=[], after=None):
-    """
-    Query the Reddit API and return a list containing the titles of all hot
-    articles for a given subreddit. If no results are found for the given
-    subreddit, return None.
-    """
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
-    headers = {
-        'User-Agent':
-        'python:com.example.myredditapp:v1.0 (by /u/yourusername)'
-           }
-    params = {'limit': 100}
-    if after:
-        params['after'] = after
-
-    try:
-        response = requests.get(url,
-                                headers=headers,
-                                params=params,
-                                allow_redirects=False
-                                )
-        if response.status_code == 200:
-            data = response.json()
-            posts = data.get('data', {}).get('children', [])
-            for post in posts:
-                hot_list.append(post.get('data', {}).get('title', None))
-            after = data.get('data', {}).get('after', None)
-            if after:
-                return recurse(subreddit, hot_list, after)
-            else:
-                return hot_list
-        else:
-            return None
-    except requests.RequestException:
+def recurse(subreddit, hot_list=[], after=""):
+    base_url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    params = {"after": after} if after else {}
+    response = requests.get(base_url, params=params,
+                            headers={'User-agent': 'your bot 0.1'})
+    if response.status_code == 404:
         return None
+    data = response.json()
+    if not data['data']['children']:
+        return hot_list if hot_list else None
+    hot_list.extend([article['data']['title']
+                    for article in data['data']['children']])
+    after = data['data']['after']
+    if not after:
+        return hot_list
+    return recurse(subreddit, hot_list, after)
