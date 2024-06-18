@@ -12,8 +12,10 @@ def top_ten(subreddit):
     listed for a given subreddit. If the subreddit is invalid, print None.
     """
     url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
-    headers = {'User-Agent': 'python:com.example.myredditapp:v1.0 (by /u/yourusername)'}
-    
+    headers = {
+        'User-Agent':
+        'python:com.example.myredditapp:v1.0 (by /u/yourusername)'}
+
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
         if response.status_code == 200:

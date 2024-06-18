@@ -13,13 +13,20 @@ def recurse(subreddit, hot_list=[], after=None):
     subreddit, return None.
     """
     url = f"https://www.reddit.com/r/{subreddit}/hot.json"
-    headers = {'User-Agent': 'python:com.example.myredditapp:v1.0 (by /u/yourusername)'}
+    headers = {
+        'User-Agent':
+        'python:com.example.myredditapp:v1.0 (by /u/yourusername)'
+           }
     params = {'limit': 100}
     if after:
         params['after'] = after
 
     try:
-        response = requests.get(url, headers=headers, params=params, allow_redirects=False)
+        response = requests.get(url,
+                                headers=headers,
+                                params=params,
+                                allow_redirects=False
+                                )
         if response.status_code == 200:
             data = response.json()
             posts = data.get('data', {}).get('children', [])
